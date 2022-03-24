@@ -5,6 +5,8 @@ if __name__ == "__main__":
   parser.add_argument("--kaffe-navn", help="Navnet på kaffen")
   parser.add_argument("--poeng", help="Poeng på kaffesmaken")
   parser.add_argument("--brenneri", help="Navnet på brenneriet")
+  parser.add_argument("--smaksnotat", help="Notater om kaffen")
+
   arguments = parser.parse_args()
 
   # Nå har arguments masse data som du kan bruke slik:
