@@ -73,6 +73,7 @@ def check_coffee_name(connection, kaffe_navn):
     rows = res.fetchall()
     return len(rows) == 1
 
+
 def get_batch_id(connection, kaffe_navn):
     res = connection.execute("Select PartiID FROM BrentKaffe WHERE BrentKaffeNavn = ?",  (kaffe_navn,))
     rows = res.fetchall()
