@@ -178,8 +178,10 @@ def coffee_description(connection):
 
     coffees = get_coffee_by_description(connection, description)
 
-    for coffee, roastery in coffees:
-        print(coffee, roastery)
+    print("\n===== Coffees described as 'floral' =====")
+    for row in coffees:
+        print(f"Distillery: {row[1]}, Coffee Name: {row[0]}")
+    print("\n")
 
 if __name__ == '__main__':
     connection = create_connection("KaffeDB.db")

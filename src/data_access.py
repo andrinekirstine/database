@@ -107,10 +107,15 @@ def create_review(connection, review: Review):
 
 def get_coffee_by_description(connection, description):
     """Skal returnere liste med tupler. Kaffenavn og brenneri basert på beskrivelsen"""
-    res = connection.execute("""SELECT BrentKaffeNavn, BrenneriNavn FROM BrentKaffe JOIN Brenneri on BrentKaffeNavn.BrenneriID = Brenneri.BrenneriID
-        SELECT BrentKaffeNavn from Kaffesmaking where Smaksnotater like "%?%" UNION 
-        SELECT BrentKaffeNavn from BrentKaffe where Beskrivelse like "%?%""",  (description,))
-    rows = res.fetchall()
-    if len(rows) < 1:
+    res1 = connection.execute("""SELECT Kaffesmaking.BrentKaffeNavn, BrenneriNavn FROM Kaffesmaking JOIN Brenneri ON Kaffesmaking.BrenneriID = Brenneri.BrenneriID
+        WHERE Kaffesmaking.Smaksnotater LIKE '%' || ? || '%' """,  (description,))
+    res2 = connection.execute("""SELECT BrentKaffe.BrentKaffeNavn, BrenneriNavn FROM BrentKaffe JOIN Brenneri ON BrentKaffe.BrenneriID = Brenneri.BrenneriID
+        WHERE BrentKaffe.Beskrivelse LIKE '%' || ? || '%' """,  (description,))
+
+    rows1 = res1.fetchall()
+    rows2 = res2.fetchall()
+    totalRow = rows1+rows2
+
+    if len(totalRow) < 1:
         return None
-    return rows
+    return totalRow
