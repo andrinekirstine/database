@@ -105,7 +105,7 @@ def create_review(connection, review: Review):
 
 def get_coffee_by_description(connection, description):
     """Skal returnere liste med tupler. Kaffenavn og brenneri basert på beskrivelsen"""
-    res = connection.execute("""SELECT BrentKaffeNavn, BrenneiNavn FROM BrentKaffe JOIN Brenneri on BrentKaffeNavn.BrenneriID = Brenneri.BrenneriID
+    res = connection.execute("""SELECT BrentKaffeNavn, BrenneriNavn FROM BrentKaffe JOIN Brenneri on BrentKaffeNavn.BrenneriID = Brenneri.BrenneriID
         SELECT BrentKaffeNavn from Kaffesmaking where Smaksnotat like "%?%" UNION 
         SELECT BrentKaffeNavn from BrentKaffe where Beskrivelse like "%?%""",  (description,))
     rows = res.fetchall()
