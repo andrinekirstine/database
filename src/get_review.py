@@ -111,7 +111,7 @@ def MenuSelection(userId, conn):
                 print("5. Unwashed Coffee from Rwanda and Colombia") # Done
                 print("6. Logout") # Done
                 choice = int(input())
-            except:
+            except ValueError:
                 print("Wrong input..")
                 print("\n")
                 choice = 0
@@ -128,23 +128,25 @@ def MenuSelection(userId, conn):
             Unwashed(conn)
         choice = 0
         
-def BestValue(conn):
-    res = conn.execute("""SELECT b.BrenneriNavn, a.BrentKaffeNavn, c.KiloprisKr,  SUM(a.AntallPoeng) * 1.0 / COUNT(a.AntallPoeng) as poeng 
+def get_best_value(connection):
+    res = connection.execute("""SELECT b.BrenneriNavn, a.BrentKaffeNavn, c.KiloprisKr,  SUM(a.AntallPoeng) * 1.0 / COUNT(a.AntallPoeng) as poeng 
         FROM Kaffesmaking a 
         INNER JOIN BrentKaffe c ON a.BrentKaffeNavn = c.BrentKaffeNavn 
         INNER JOIN Brenneri b ON a.BrenneriID = b.BrenneriID 
         GROUP BY a.BrentKaffeNavn 
         ORDER BY (poeng / KiloprisKr) DESC""")
-
     rows = res.fetchall()
+    return rows
 
+def BestValue(connection):
+    rows = get_best_value(connection)
     print("===== Best Score Coffees - Ordered by Best Value =====")
+
     for row in rows:
-        # TODO endre navn til roastery
-        print(f"Distillery Name: {row[0]}, Coffee Name: {row[1]}, Kilogram Price: {row[2]}, Average Score: {row[3]}")
+        print(f"Roastery Name: {row[0]}, Coffee Name: {row[1]}, Kilogram Price: {row[2]}, Average Score: {row[3]}")
     print("\n")
 
-def MostReviews(conn):
+def get_most_reviews(connection):
     res = conn.execute("""SELECT c.Fornavn, c.Etternavn, count(DISTINCT a.BrentKaffeNavn) as amount FROM Kaffesmaking as a 
         INNER JOIN BrentKaffe as b ON a.BrentKaffeNavn = b.BrentKaffeNavn
         INNER JOIN Bruker as c ON a.BrukerID = c.BrukerID
@@ -152,8 +154,12 @@ def MostReviews(conn):
         ORDER BY amount DESC""")
 
     rows = res.fetchall()
+    return rows
 
+def MostReviews(connection):
+    rows = get_most_reviews(connection)
     print("===== Most Unique Coffee Reviews =====")
+    
     for row in rows:
         print(f"Name: {row[0]} {row[1]}, Unique Coffee Reviews: {row[2]}")
     print("\n")

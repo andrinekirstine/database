@@ -3,17 +3,17 @@ import hashlib
 
 from data_access import create_user, fetch_login
 
-def run(conn):
-    
+def run(connection):
     try: 
         while True:
-            userId = LoginRegister(conn)
+            userId = login_register(connection)
 
-            MenuSelection(userId, conn)
+            MenuSelection(userId, connection)
     except KeyboardInterrupt:
-        conn.close()
+        connection.close()
 
-def LoginRegister(connection):
+
+def login_register(connection):
     userId = None
 
     while userId == None:
@@ -33,7 +33,7 @@ def LoginRegister(connection):
         if(choice == 1): #login
             userId = login(connection)
         elif(choice == 2): #register
-            Register(connection)
+            register(connection)
 
     return userId
 
@@ -53,7 +53,9 @@ def login(connection):
         print(f"Successfully logged in with UserID {rows[0][0]}")
         return rows[0][0]
 
-def Register(connection):
+
+def register(connection):
+
     print("===== Register =====")
     print("Email: ")
     email = input()
@@ -72,6 +74,55 @@ def Register(connection):
     else:
         print(f"User with {email} already exits.")
 
+
+def MenuSelection(userId, connection):
+    # TODO endre conn til connection
+    choice = 0
+    while choice != 6:
+        while choice < 1 or choice > 6:
+            try:
+                print("Select option below")
+                print("1. Give Review") # Done
+                print("2. List of most unique coffee reviewers") # Done
+                print("3. Best Value Coffee") # Done
+                print("4. Search for \"Floral\"")
+                print("5. Unwashed Coffee from Rwanda and Colombia") # Done
+                print("6. Logout") # Done
+                choice = int(input())
+            except ValueError:
+                print("Wrong input..")
+                print("\n")
+                choice = 0
+    
+        if choice == 1:
+            GiveReview(userId, connection)
+        elif choice == 2:
+            MostReviews(connection)
+        elif choice == 3:
+            BestValue(connection)
+        elif choice == 4:
+            GiveReview(userId, connection)
+        elif choice == 5:
+            Unwashed(connection)
+        choice = 0
+
+
+def BestValue(connection):
+    rows = get_best_value(connection)
+    print("===== Best Score Coffees - Ordered by Best Value =====")
+
+    for row in rows:
+        print(f"Roastery Name: {row[0]}, Coffee Name: {row[1]}, Kilogram Price: {row[2]}, Average Score: {row[3]}")
+    print("\n")
+
+
+def MostReviews(connection):
+    rows = get_most_reviews(connection)
+    print("===== Most Unique Coffee Reviews =====")
+    
+    for row in rows:
+        print(f"Name: {row[0]} {row[1]}, Unique Coffee Reviews: {row[2]}")
+    print("\n")
 
 
 """
