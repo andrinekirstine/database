@@ -173,7 +173,10 @@ def GiveReview(userId, connection):
 
 
 def coffe_desricption(connection):
-    description = input("Search for coffees with description: ")
+    # description = input("Search for coffees with description: ") 
+    """Egentlig sånn det burde gjøres, men forenklet versjon nå."""
+
+    description = "floral"
 
     coffees = get_coffee_by_description(connection, description)
 
