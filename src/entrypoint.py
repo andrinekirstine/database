@@ -8,7 +8,7 @@ def run(connection):
         while True:
             userId = login_register(connection)
 
-            MenuSelection(userId, connection)
+            menu_selection(userId, connection)
     except KeyboardInterrupt:
         connection.close()
 
@@ -63,11 +63,11 @@ def register(connection):
     password = hashlib.sha256(input().encode()).hexdigest()
     print(password)
     print("First Name: ")
-    firstName = input()
+    first_name = input()
     print("Last Name: ")
-    lastName = input()
+    last_name = input()
 
-    success = create_user(connection, firstName, lastName, email, password)
+    success = create_user(connection, first_name, last_name, email, password)
 
     if success:
         print("Successfully Registered!")
@@ -75,7 +75,7 @@ def register(connection):
         print(f"User with {email} already exits.")
 
 
-def MenuSelection(userId, connection):
+def menu_selection(userId, connection):
     # TODO endre conn til connection
     choice = 0
     while choice != 6:
@@ -95,19 +95,19 @@ def MenuSelection(userId, connection):
                 choice = 0
     
         if choice == 1:
-            GiveReview(userId, connection)
+            give_review(userId, connection)
         elif choice == 2:
-            MostReviews(connection)
+            most_reviews(connection)
         elif choice == 3:
-            BestValue(connection)
+            best_value(connection)
         elif choice == 4:
             coffe_desricption(connection)
         elif choice == 5:
-            Unwashed(connection)
+            unwashed(connection)
         choice = 0
 
 # TODO importer funksjoner 
-def BestValue(connection):
+def best_value(connection):
     rows = get_best_value(connection)
     print("===== Best Score Coffees - Ordered by Best Value =====")
 
@@ -116,7 +116,7 @@ def BestValue(connection):
     print("\n")
 
 
-def MostReviews(connection):
+def most_reviews(connection):
     rows = get_most_reviews(connection)
     print("===== Most Unique Coffee Reviews =====")
     
@@ -125,20 +125,20 @@ def MostReviews(connection):
     print("\n")
 
 
-def Unwashed(connection):
+def unwashed(connection):
     rows = get_unwashed(connection)
     for row in rows:
         print(f"Distillery: {row[0]}, Coffee Name: {row[1]}")
 
 
-def GiveReview(userId, connection):
-    review = Review(userId=userId)
+def give_review(userID, connection):
+    review = Review(userId=userID)
 
     while True:
-        brenneriNavn = input("Roastery Name: ")
+        brenneri_navn = input("Roastery Name: ")
         # TODO python renaming
 
-        review.brenneri = get_roastery_id(connection, brenneriNavn)
+        review.brenneri = get_roastery_id(connection, brenneri_navn)
 
         if review.brenneri is None:
             print("Error: wrong roastery name")
@@ -183,5 +183,5 @@ def coffe_desricption(connection):
         print(coffee, roastery)
 
 if __name__ == '__main__':
-    conn = create_connection("Test.db")
-    run(conn)
+    connection = create_connection("Test.db")
+    run(connection)

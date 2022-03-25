@@ -60,8 +60,8 @@ def get_unwashed(connection):
     return rows
 
 
-def get_roastery_id(connection, brenneriNavn):
-    res = connection.execute("Select BrenneriID FROM Brenneri WHERE BrenneriNavn = ?",  (brenneriNavn,))
+def get_roastery_id(connection, brenneri_navn):
+    res = connection.execute("Select BrenneriID FROM Brenneri WHERE BrenneriNavn = ?",  (brenneri_navn,))
     rows = res.fetchall()
     if len(rows) < 1:
         return None
