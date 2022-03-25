@@ -1,3 +1,4 @@
+from datetime import datetime
 import sqlite3
 import hashlib
 
@@ -6,7 +7,7 @@ def create_connection(db_file):
     """ create a database connection to a SQLite database """
     try:
         conn = sqlite3.connect(db_file)
-    except Error as e:
+    except sqlite3.Error as e:
         print(e)
     return conn
 
@@ -67,8 +68,8 @@ def get_roastery_id(connection, brenneriNavn):
     return rows[0]
 
 
-def check_coffee_name(connection, kaffeNavn):
-    res = connection.execute("Select count(1) FROM BrentKaffe WHERE BrentKaffeNavn = ?",  (kaffeNavn,))
+def check_coffee_name(connection, kaffe_navn):
+    res = connection.execute("Select count(1) FROM BrentKaffe WHERE BrentKaffeNavn = ?",  (kaffe_navn,))
     rows = res.fetchall()
     return len(rows) == 1
 
@@ -94,12 +95,12 @@ def create_review(connection, review: Review):
     except Exception as e:
         print(str(e))
 
-
-"""
-def some_function():
-    print("Hello from some module")
-
-class SomeClass:
-    def __init__(self):
-        print("Hello from some class")
-"""
+def get_coffee_by_description(connection, description):
+    """Skal returnere liste med tupler. Kaffenavn og brenneri basert på beskrivelsen"""
+    res = connection.execute("""SELECT BrentKaffeNavn, BrenneiNavn FROM BrentKaffe JOIN Brenneri on BrentKaffeNavn.BrenneriID = Brenneri.BrenneriID
+        SELECT BrentKaffeNavn from Kaffesmaking where Smaksnotat like "%?%" UNION 
+        SELECT BrentKaffeNavn from BrentKaffe where Beskrivelse like "%?%""",  (description,))
+    rows = res.fetchall()
+    if len(rows) < 1:
+        return None
+    return rows

@@ -1,7 +1,7 @@
 import sqlite3
 import hashlib
 
-from data_access import Review, check_coffee_name, create_connection, create_review, create_user, fetch_login, get_best_value, get_most_reviews, get_roastery_id, get_unwashed
+from data_access import Review, check_coffee_name, create_connection, create_review, create_user, fetch_login, get_best_value, get_coffee_by_description, get_most_reviews, get_roastery_id, get_unwashed
 
 def run(connection):
     try: 
@@ -101,7 +101,7 @@ def MenuSelection(userId, connection):
         elif choice == 3:
             BestValue(connection)
         elif choice == 4:
-            GiveReview(userId, connection)
+            coffe_desricption(connection)
         elif choice == 5:
             Unwashed(connection)
         choice = 0
@@ -169,8 +169,19 @@ def GiveReview(userId, connection):
     # FIXME bruker skal ikke skrive inn 
     review.batchId = int(input("Batch ID: "))
 
-    create_review(connection, review)    
+    create_review(connection, review)
 
+
+def coffe_desricption(connection):
+    # description = input("Search for coffees with description: ") 
+    """Egentlig sånn det burde gjøres, men forenklet versjon nå."""
+
+    description = "floral"
+
+    coffees = get_coffee_by_description(connection, description)
+
+    for coffee, roastery in coffees:
+        print(coffee, roastery)
 
 if __name__ == '__main__':
     conn = create_connection("Test.db")
