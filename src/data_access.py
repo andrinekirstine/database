@@ -10,6 +10,12 @@ def create_connection(db_file):
         print(e)
     return conn
 
+def fetch_login(connection, email, password):
+    res = connection.execute("Select * FROM Bruker WHERE Epostadresse = ? AND Passord = ?",  (email, password))
+    rows = res.fetchall()
+    return rows
+
+
 
 
 

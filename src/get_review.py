@@ -7,14 +7,15 @@ from time import timezone
 conn = None
 
 def create_connection(db_file):
-
+    conn = None
     """ create a database connection to a SQLite database """
-    global conn
     try:
         conn = sqlite3.connect(db_file)
     except Error as e:
         print(e)
+    return conn
 
+def run(conn):
     while True:
         userId = LoginRegister(conn)
 
@@ -54,16 +55,19 @@ def login(connection):
     print("password: ")
     password = hashlib.sha256(input().encode()).hexdigest()
 
-    data = [email, password]
+    rows = fetch_login(connection, email, password)
 
-    res = connection.execute("Select * FROM Bruker WHERE Epostadresse = ? AND Passord = ?",  data)
-    rows = res.fetchall()
     if len(rows) <= 0:
         print(f"Error: Incorrect Email or Password")
         return None
     else:
         print(f"Successfully logged in with UserID {rows[0][0]}")
         return rows[0][0]
+
+def fetch_login(connection, email, password):
+    res = connection.execute("Select * FROM Bruker WHERE Epostadresse = ? AND Passord = ?",  (email, password))
+    rows = res.fetchall()
+    return rows
 
 def Register(connection):
     print("===== Register =====")
@@ -128,6 +132,7 @@ def BestValue(conn):
 
     print("===== Best Score Coffees - Ordered by Best Value =====")
     for row in rows:
+        # TODO endre navn til roastery
         print(f"Distillery Name: {row[0]}, Coffee Name: {row[1]}, Kilogram Price: {row[2]}, Average Score: {row[3]}")
     print("\n")
 
@@ -213,4 +218,5 @@ def GiveReview(userId, conn):
         print(str(e))
 
 if __name__ == '__main__':
-    create_connection("Test.db")
+    conn = create_connection("Test.db")
+    run(conn)
