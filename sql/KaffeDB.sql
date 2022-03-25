@@ -68,7 +68,6 @@ CREATE TABLE Gard (
 
 CREATE TABLE Foredlingsmetode (
 	Navn VARCHAR(30) NOT NULL,
-	Metode VARCHAR(30) NOT NULL,
 	Beskrivelse VARCHAR(300) NOT NULL,
 	CONSTRAINT Foredlingsmetode_PK PRIMARY KEY (Navn));
 
