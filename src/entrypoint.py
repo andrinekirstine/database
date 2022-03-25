@@ -101,7 +101,7 @@ def MenuSelection(userId, connection):
         elif choice == 3:
             BestValue(connection)
         elif choice == 4:
-            GiveReview(userId, connection)
+            coffe_desricption(connection)
         elif choice == 5:
             Unwashed(connection)
         choice = 0
