@@ -39,12 +39,22 @@ def get_best_value(connection):
 
 
 def get_most_reviews(connection):
-    res = conn.execute("""SELECT c.Fornavn, c.Etternavn, count(DISTINCT a.BrentKaffeNavn) as amount FROM Kaffesmaking as a 
+    res = connection.execute("""SELECT c.Fornavn, c.Etternavn, count(DISTINCT a.BrentKaffeNavn) as amount FROM Kaffesmaking as a 
         INNER JOIN BrentKaffe as b ON a.BrentKaffeNavn = b.BrentKaffeNavn
         INNER JOIN Bruker as c ON a.BrukerID = c.BrukerID
         GROUP BY a.BrukerID
         ORDER BY amount DESC""")
 
+    rows = res.fetchall()
+    return rows
+
+def get_unwashed(connection):
+    res = connection.execute("""SELECT brenneri.BrenneriNavn, kaffe.BrentKaffeNavn FROM BrentKaffe as kaffe
+        INNER JOIN Brenneri as brenneri ON kaffe.BrenneriID = brenneri.BrenneriID
+        INNER JOIN Parti as parti ON parti.PartiID = kaffe.PartiID
+        INNER JOIN Gard as gard ON gard.GardID = parti.PartiID
+        WHERE parti.ForedlingNavn = 'Unwashed'
+        AND (gard.Land = 'Colombia' OR gard.Land = 'Rwanda')""")
     rows = res.fetchall()
     return rows
 

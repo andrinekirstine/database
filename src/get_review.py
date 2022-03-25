@@ -1,4 +1,5 @@
 from datetime import datetime
+from multiprocessing import connection
 
 import sqlite3
 import hashlib
@@ -164,7 +165,7 @@ def MostReviews(connection):
         print(f"Name: {row[0]} {row[1]}, Unique Coffee Reviews: {row[2]}")
     print("\n")
 
-def Unwashed(conn):
+def get_unwashed(connection):
     res = conn.execute("""SELECT brenneri.BrenneriNavn, kaffe.BrentKaffeNavn FROM BrentKaffe as kaffe
         INNER JOIN Brenneri as brenneri ON kaffe.BrenneriID = brenneri.BrenneriID
         INNER JOIN Parti as parti ON parti.PartiID = kaffe.PartiID
@@ -172,8 +173,14 @@ def Unwashed(conn):
         WHERE parti.ForedlingNavn = 'Unwashed'
         AND (gard.Land = 'Colombia' OR gard.Land = 'Rwanda')""")
     rows = res.fetchall()
+    return rows
+
+
+def Unwashed(connection):
+    rows = get_unwashed(connection)
     for row in rows:
         print(f"Distillery: {row[0]}, Coffee Name: {row[1]}")
+
 
 def GiveReview(userId, conn):
     keepGoing = True

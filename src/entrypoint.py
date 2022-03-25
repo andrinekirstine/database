@@ -106,7 +106,7 @@ def MenuSelection(userId, connection):
             Unwashed(connection)
         choice = 0
 
-
+# TODO importer funksjoner 
 def BestValue(connection):
     rows = get_best_value(connection)
     print("===== Best Score Coffees - Ordered by Best Value =====")
@@ -123,6 +123,13 @@ def MostReviews(connection):
     for row in rows:
         print(f"Name: {row[0]} {row[1]}, Unique Coffee Reviews: {row[2]}")
     print("\n")
+
+
+def Unwashed(connection):
+    rows = get_unwashed(connection)
+    for row in rows:
+        print(f"Distillery: {row[0]}, Coffee Name: {row[1]}")
+
 
 
 """
