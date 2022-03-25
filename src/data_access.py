@@ -59,6 +59,41 @@ def get_unwashed(connection):
     return rows
 
 
+def get_roastery_id(connection, brenneriNavn):
+    res = connection.execute("Select BrenneriID FROM Brenneri WHERE BrenneriNavn = ?",  (brenneriNavn,))
+    rows = res.fetchall()
+    if len(rows) < 1:
+        return None
+    return rows[0]
+
+
+def check_coffee_name(connection, kaffeNavn):
+    res = connection.execute("Select count(1) FROM BrentKaffe WHERE BrentKaffeNavn = ?",  (kaffeNavn,))
+    rows = res.fetchall()
+    return len(rows) == 1
+
+
+class Review:
+    def __init__(self, userId=None, poeng=None, smaks_notat=None, kaffe_navn=None, brenneri=None, batchId=None):
+        self.userId = userId
+        self.poeng = poeng
+        self.smaks_notat = smaks_notat
+        self.kaffe_navn = kaffe_navn
+        self.brenneri = brenneri
+        self.batchId = batchId
+    def to_sql(self):
+        data = [self.userId, self.poeng, self.smaks_notat, datetime.now(), self.kaffe_navn, self.brenneri, self.batchId]    
+        return data
+
+
+def create_review(connection, review: Review):
+    data = review.to_sql()
+    try:
+        connection.execute("INSERT INTO Kaffesmaking(BrukerID, AntallPoeng, Smaksnotater, Dato, BrentKaffeNavn, BrenneriID, PartiID) VALUES (?,?,?,?,?,?,?)",  data)
+        connection.commit()
+    except Exception as e:
+        print(str(e))
+
 
 """
 def some_function():

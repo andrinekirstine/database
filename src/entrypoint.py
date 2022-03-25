@@ -1,7 +1,7 @@
 import sqlite3
 import hashlib
 
-from data_access import create_user, fetch_login
+from data_access import Review, check_coffee_name, create_connection, create_review, create_user, fetch_login, get_best_value, get_most_reviews, get_roastery_id, get_unwashed
 
 def run(connection):
     try: 
@@ -131,15 +131,47 @@ def Unwashed(connection):
         print(f"Distillery: {row[0]}, Coffee Name: {row[1]}")
 
 
+def GiveReview(userId, connection):
+    review = Review(userId=userId)
 
-"""
-from data_access import some_function, SomeClass
+    while True:
+        brenneriNavn = input("Roastery Name: ")
+        # TODO python renaming
 
-if __name__ == "__main__":
-    # Kode her kjøres kun hvis man kjører denne fila direkte, altså ikke importerer den
-    # tenk at all kode som skal kjøres ligger her!
-    print("Hello world")
-    some_function()
+        review.brenneri = get_roastery_id(connection, brenneriNavn)
 
-    c = SomeClass()
-"""
+        if review.brenneri is None:
+            print("Error: wrong roastery name")
+            continue
+        break
+
+    while True:
+        review.kaffe_navn = input("Coffee Name: ")
+
+        coffe_name_exits = check_coffee_name(connection, review.kaffe_navn)
+
+        if not coffe_name_exits:
+            print("Error: wrong coffee name")
+            continue
+        break
+
+    while True:
+        try:
+            review.poeng = int(input("Score (0 - 10): "))
+            break
+
+        except ValueError:
+            print("Wrong score: Use numbers 0 - 10")
+
+
+    review.smaks_notat = input("Taste Note: ")
+
+    # FIXME bruker skal ikke skrive inn 
+    review.batchId = int(input("Batch ID: "))
+
+    create_review(connection, review)    
+
+
+if __name__ == '__main__':
+    conn = create_connection("Test.db")
+    run(conn)
