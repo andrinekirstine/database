@@ -1,7 +1,7 @@
 import sqlite3
 import hashlib
 
-from data_access import Review, check_coffee_name, create_connection, create_review, create_user, fetch_login, get_best_value, get_coffee_by_description, get_most_reviews, get_roastery_id, get_unwashed
+from data_access import Review, check_coffee_name, create_connection, create_review, create_user, fetch_login, get_batch_id, get_best_value, get_coffee_by_description, get_most_reviews, get_roastery_id, get_unwashed
 
 def run(connection):
     try: 
@@ -166,8 +166,7 @@ def GiveReview(userId, connection):
 
     review.smaks_notat = input("Taste Note: ")
 
-    # FIXME bruker skal ikke skrive inn 
-    review.batchId = int(input("Batch ID: "))
+    review.batchId = get_batch_id(connection, review.kaffe_navn)
 
     create_review(connection, review)
 
