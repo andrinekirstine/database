@@ -100,7 +100,7 @@ def menu_selection(userId, connection):
         elif choice == 3:
             best_value(connection)
         elif choice == 4:
-            coffe_desricption(connection)
+            coffee_description(connection)
         elif choice == 5:
             unwashed(connection)
         choice = 0
@@ -116,7 +116,7 @@ def best_value(connection):
 
 def most_reviews(connection):
     rows = get_most_reviews(connection)
-    print("===== Most Unique Coffee Reviews =====")
+    print("\n===== Most Unique Coffee Reviews =====")
     
     for row in rows:
         print(f"Name: {row[0]} {row[1]}, Unique Coffee Reviews: {row[2]}")
@@ -125,8 +125,10 @@ def most_reviews(connection):
 
 def unwashed(connection):
     rows = get_unwashed(connection)
+    print("\n===== Unwashed coffees from Rwanda and Colombia =====")
     for row in rows:
         print(f"Distillery: {row[0]}, Coffee Name: {row[1]}")
+    print("\n")
 
 
 def give_review(userId, connection):
@@ -164,11 +166,11 @@ def give_review(userId, connection):
     review.smaks_notat = input("Taste Note: ")
 
     review.batchId = get_batch_id(connection, review.kaffe_navn)
-
+    print("\n** Review registered!\n\n") # Better readability
     create_review(connection, review)
 
 
-def coffe_desricption(connection):
+def coffee_description(connection):
     # description = input("Search for coffees with description: ") 
     """Egentlig sånn det burde gjøres, men forenklet versjon nå."""
 
@@ -180,5 +182,5 @@ def coffe_desricption(connection):
         print(coffee, roastery)
 
 if __name__ == '__main__':
-    connection = create_connection("Test.db")
+    connection = create_connection("KaffeDB.db")
     run(connection)

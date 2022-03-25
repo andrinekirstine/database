@@ -62,22 +62,24 @@ def get_unwashed(connection):
 
 def get_roastery_id(connection, brenneri_navn):
     res = connection.execute("Select BrenneriID FROM Brenneri WHERE BrenneriNavn = ?",  (brenneri_navn,))
-    rows = res.fetchall()
-    if len(rows) < 1:
+    rows = res.fetchone()
+    if rows == None:
         return None
     return rows[0]
 
 
 def check_coffee_name(connection, kaffe_navn):
     res = connection.execute("Select count(1) FROM BrentKaffe WHERE BrentKaffeNavn = ?",  (kaffe_navn,))
+    if get_batch_id(connection, kaffe_navn) == None: ## Failsafe
+        return False
     rows = res.fetchall()
     return len(rows) == 1
 
 
 def get_batch_id(connection, kaffe_navn):
     res = connection.execute("Select PartiID FROM BrentKaffe WHERE BrentKaffeNavn = ?",  (kaffe_navn,))
-    rows = res.fetchall()
-    if len(rows) < 1:
+    rows = res.fetchone()
+    if rows == None:
         return None
     return rows[0]
 
