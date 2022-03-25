@@ -81,14 +81,22 @@ def Register(connection):
     print("Last Name: ")
     lastName = input()
 
-    data = [firstName, lastName, email, password]
+    success = create_user(connection, firstName, lastName, email, password)
+
+    if success:
+        print("Successfully Registered!")
+    else:
+        print(f"User with {email} already exits.")
+
+
+def create_user(connection, firstName, lastName, email, password):
+    data = (firstName, lastName, email, password)
     try:
         connection.execute("INSERT INTO Bruker(Fornavn, Etternavn, Epostadresse, Passord) VALUES (?,?,?,?)",  data)
         connection.commit()
-    except:
-        print(f"Error: User with Email {email} already exists.")
-        return
-    print(f"Successfully Registered!")
+    except ValueError:
+        return False
+    return True
 
 def MenuSelection(userId, conn):
     choice = 0

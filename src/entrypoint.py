@@ -1,7 +1,7 @@
 import sqlite3
 import hashlib
 
-from data_access import fetch_login
+from data_access import create_user, fetch_login
 
 def run(conn):
     
@@ -53,7 +53,24 @@ def login(connection):
         print(f"Successfully logged in with UserID {rows[0][0]}")
         return rows[0][0]
 
+def Register(connection):
+    print("===== Register =====")
+    print("Email: ")
+    email = input()
+    print("Password: ")
+    password = hashlib.sha256(input().encode()).hexdigest()
+    print(password)
+    print("First Name: ")
+    firstName = input()
+    print("Last Name: ")
+    lastName = input()
 
+    success = create_user(connection, firstName, lastName, email, password)
+
+    if success:
+        print("Successfully Registered!")
+    else:
+        print(f"User with {email} already exits.")
 
 
 
