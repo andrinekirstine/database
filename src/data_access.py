@@ -18,8 +18,8 @@ def fetch_login(connection, email, password):
     return rows
 
 
-def create_user(connection, firstName, lastName, email, password):
-    data = (firstName, lastName, email, password)
+def create_user(connection, first_name, last_name, email, password):
+    data = (first_name, last_name, email, password)
     try:
         connection.execute("INSERT INTO Bruker(Fornavn, Etternavn, Epostadresse, Passord) VALUES (?,?,?,?)",  data)
         connection.commit()
