@@ -76,18 +76,17 @@ def register(connection):
 
 
 def menu_selection(userId, connection):
-    # TODO endre conn til connection
     choice = 0
     while choice != 6:
         while choice < 1 or choice > 6:
             try:
                 print("Select option below")
-                print("1. Give Review") # Done
-                print("2. List of most unique coffee reviewers") # Done
-                print("3. Best Value Coffee") # Done
+                print("1. Give Review") 
+                print("2. List of most unique coffee reviewers") 
+                print("3. Best Value Coffee") 
                 print("4. Search for \"Floral\"")
-                print("5. Unwashed Coffee from Rwanda and Colombia") # Done
-                print("6. Logout") # Done
+                print("5. Unwashed Coffee from Rwanda and Colombia") 
+                print("6. Logout") 
                 choice = int(input())
             except ValueError:
                 print("Wrong input..")
@@ -106,7 +105,6 @@ def menu_selection(userId, connection):
             unwashed(connection)
         choice = 0
 
-# TODO importer funksjoner 
 def best_value(connection):
     rows = get_best_value(connection)
     print("===== Best Score Coffees - Ordered by Best Value =====")
@@ -131,12 +129,11 @@ def unwashed(connection):
         print(f"Distillery: {row[0]}, Coffee Name: {row[1]}")
 
 
-def give_review(userID, connection):
-    review = Review(userId=userID)
+def give_review(userId, connection):
+    review = Review(userId=userId)
 
     while True:
         brenneri_navn = input("Roastery Name: ")
-        # TODO python renaming
 
         review.brenneri = get_roastery_id(connection, brenneri_navn)
 
